@@ -1821,3 +1821,35 @@
         opacity: 0;
     }
 }
+
+/* ===================================================================
+   LANDSCAPE PHONES : keep the whole stage on screen
+   Scoped to orientation:landscape only, so portrait phones, tablets
+   and desktop keep exactly the layout they had before.
+   =================================================================== */
+
+/* In landscape the greeting sat at bottom:100% - outside the box the page
+   centres - so it hung off the top of the screen. Putting it back into the
+   normal flow makes the browser centre greeting + book as one piece. */
+@media screen and (max-height: 560px) and (orientation: landscape) {
+    .book-greeting,
+    .book-greeting.show {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: min(92vw, 720px);
+        margin: 0 auto 12px;
+    }
+}
+
+/* One rule for every short landscape screen. In landscape the 440x290
+   spread always wins over the 300x200 portrait one, so the stage is
+   ~290 (book) + ~50 (greeting) + 12 (gap) ~= 400px tall. */
+@media screen and (max-height: 560px) and (orientation: landscape) {
+    .book-container,
+    .book-container.show {
+        transform: scale(min(1, calc((100vh - 12px) / 400px))) translateY(0);
+        transform-origin: center center;
+    }
+}
