@@ -1,0 +1,10 @@
+# the source video stays on this PC, never published
+*.mp4
+
+# deployment / tooling
+.vercel
+.vercelignore
+
+# local test files
+_probe*.html
+_diag*.html
