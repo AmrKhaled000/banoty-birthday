@@ -935,6 +935,41 @@ function showFloatingHearts() {
 }
 
 // 5. Tối ưu hóa hiệu ứng mở sách
+/* Hearts floating up out of the Arabic greeting above the book. */
+let greetingHeartTimer = null;
+const GREETING_HEARTS = ['\u2764\ufe0f', '\ud83d\udc97', '\ud83d\udc96', '\ud83d\udc95', '\ud83d\udc9e', '\ud83d\udc9f'];
+
+function spawnGreetingHeart() {
+    const g = document.getElementById('bookGreeting');
+    if (!g || !g.classList.contains('show')) return;
+    const text = g.querySelector('.book-greeting-text');
+    if (!text) return;
+
+    const heart = document.createElement('div');
+    heart.className = 'greeting-heart';
+    heart.textContent = GREETING_HEARTS[Math.floor(Math.random() * GREETING_HEARTS.length)];
+    heart.style.left = (10 + Math.random() * 80) + '%';
+    heart.style.top = (text.getBoundingClientRect().height * 0.4) + 'px';
+    heart.style.fontSize = (13 + Math.random() * 12) + 'px';
+    heart.style.setProperty('--drift', ((Math.random() * 70) - 35).toFixed(1) + 'px');
+    g.appendChild(heart);
+    setTimeout(() => heart.remove(), 4600);
+}
+
+function startGreetingHearts() {
+    if (greetingHeartTimer) return;
+    spawnGreetingHeart();
+    greetingHeartTimer = setInterval(spawnGreetingHeart, 900);
+}
+
+function stopGreetingHearts() {
+    if (greetingHeartTimer) {
+        clearInterval(greetingHeartTimer);
+        greetingHeartTimer = null;
+    }
+    document.querySelectorAll('.greeting-heart').forEach(node => node.remove());
+}
+
 function showBook() {
 
     const book = document.getElementById('book');
@@ -948,6 +983,7 @@ function showBook() {
     if (bookGreeting) {
         setTimeout(() => {
             bookGreeting.classList.add('show');
+            startGreetingHearts();
         }, 500);
     }
 
@@ -1202,6 +1238,8 @@ function checkBookFinished() {
             if (bookGreeting) {
                 bookGreeting.classList.remove('show');
             }
+
+            stopGreetingHearts();
 
             setTimeout(() => {
                 const currentSettings = window.settings || settings;
